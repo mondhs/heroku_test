@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %} - Home{% endblock %}
+{% block content %}
+                         <form class="form-signin" role="form">
+                                <h2 class="form-signin-heading">Lieptas</h2>
+                                <div class="form-group">
+                                        <label class="sr-only" for="word">Žodis transribavimui</label>
+                                        <textarea class="form-control" id="word"  rows="3" placeholder="paršykite žodius transkribavimui..."></textarea>
+                                </div>
+                                <button type="button" id="submit_transribe" class="btn  btn-primary btn-block">Transkribuok <span class="glyphicon glyphicon-search"></span></button>
+                        </form>
+                        <div class="panel panel-default">
+                                <div class="panel-heading">Žodynas</div>
+                                <div class="panel-body">
+                                        <pre id="result" class="pre-scrollable"></pre>
+                                </div>
+                        </div>
+                               <div class="form-group">
+                                        <span class="caret" id="commentPlanelCarret">Komentuoti</span>
+                                        <div class="hidden" id="commentPlanel">
+                                                <div class="input-group">
+                                                        <input type="text" class="form-control" placeholder="Turite komentarų" id="comment-text">
+                                                                <span class="input-group-btn">
+                                                                        <button class="btn btn-default" type="button" id="submit-comment">Komentuoti</button>
+                                                                </span>
+                                                </div>
+                                        </div>
+                                </div>
+
+{% endblock %}
+
+{% block js_footer %}
+$(function(){
+    $( "#commentPlanelCarret" ).click(function() {
+            $('#commentPlanelCarret').addClass("hidden");
+            $('#commentPlanel').removeClass("hidden");
+    });
+    $( "#submit_transribe" ).click(function() {
+            var word = $('#word').val();
+            //alert(word);
+            var resultListHtml = $('#result');
+            word = word.replace(/[\s]+/g, "_");
+            $.getJSON( "lieptas/api/v1.0/dictionary?words="+word, function( data ) {
+                    var text =  "";//$('#result').text();
+                    $.each( data, function( key, val ) {
+                            //alert(val);
+                            text = text + key + "\t" + val + "\n" ;
+                    });
+                     $('#result').text(text);
+                    
+            });
+             $('#word').val("");
+    });
+    $("#result").focus(function() { 
+        var save_this = $(this);
+        window.setTimeout (function(){ 
+           save_this.select(); 
+        },100);
+    });  
+
+});
+{% endblock %}
+
+
