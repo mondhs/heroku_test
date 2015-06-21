@@ -1,20 +1,28 @@
 {% extends "base.html" %}
 {% block title %} - Home{% endblock %}
 {% block content %}
-                         <form class="form-signin" role="form">
-                                <h2 class="form-signin-heading">Lieptas</h2>
-                                <div class="form-group">
-                                        <label class="sr-only" for="word">Žodis transribavimui</label>
-                                        <textarea class="form-control" id="word"  rows="3" placeholder="paršykite žodius transkribavimui..."></textarea>
-                                </div>
-                                <button type="button" id="submit_transribe" class="btn  btn-primary btn-block">Transkribuok <span class="glyphicon glyphicon-search"></span></button>
-                        </form>
-                        <div class="panel panel-default">
-                                <div class="panel-heading">Žodynas</div>
-                                <div class="panel-body">
-                                        <pre id="result" class="pre-scrollable"></pre>
-                                </div>
-                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                 <form class="form-signin" role="form">
+                                     <div role="tabpanel">
+                                        <ul class="nav nav-tabs" role="tablist" id="inputTab">
+                                            <li role="presentation" class="active"><a href="#words" aria-controls="words" role="tab" data-toggle="tab">Žodžiai</a></li>
+                                            <li role="presentation"><a href="#file" aria-controls="file" role="tab" data-toggle="tab">Failas</a></li>
+                                        </ul>
+                                        <div class="tab-content" >
+                                            <div class="form-group tab-pane active" id="words">
+                                                    <label class="sr-only" for="word">Žodis transribavimui</label>
+                                                    <textarea class="form-control" id="word"  rows="3" placeholder="paršykite žodius transkribavimui..."></textarea>
+                                            </div>
+                                            <div class="form-group tab-pane" id="file">
+                                                <label for="exampleInputFile">Tekstinis failas</label>
+                                                <input type="file" id="exampleInputFile">
+                                                <p class="help-block">UTF-8 formatas, kur žodžiai atskriti tarpais arba nauja eilute</p>
+                                            </div>
+                                        </div> <!--tab-content-->
+                                    </div>
+                                    <button type="button" id="submit_transribe" class="btn  btn-primary btn-block">Transkribuok <span class="glyphicon glyphicon-search"></span></button>
+                                </form>
                                <div class="form-group">
                                         <span class="caret" id="commentPlanelCarret">Komentuoti</span>
                                         <div class="hidden" id="commentPlanel">
@@ -26,7 +34,16 @@
                                                 </div>
                                         </div>
                                 </div>
-
+                            </div><!--col-md-4-->
+                            <div class="col-md-8">
+                                <div class="panel panel-default">
+                                        <div class="panel-heading">Žodynas</div>
+                                        <div class="panel-body">
+                                                <pre id="result" class="pre-scrollable"></pre>
+                                        </div>
+                                </div>
+                            </div><!--col-md-8-->
+                        </div><!--row-->
 {% endblock %}
 
 {% block js_footer %}
@@ -57,7 +74,10 @@ $(function(){
            save_this.select(); 
         },100);
     });  
-
+    $('#inputTab a').click(function (e) {
+      e.preventDefault()
+      $(this).tab('show')
+    })
 });
 {% endblock %}
 

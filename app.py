@@ -4,6 +4,7 @@ import os
 from flask import Flask, render_template, send_from_directory,jsonify,request
 from transcriber_re_mg14 import TranscriberRegexp
 import json
+import urllib2
 
 
 # initialization
@@ -33,12 +34,21 @@ def processWords(words):
     #app.logger.info(u'[processWords] first key: {}'.format(sphinx_dictionary.iterkeys().next()))
     return sphinx_dictionary
 
+def recordRequest(words, translatedMap)
+    urlServer = u"https://script.google.com/macros/s/AKfycbxuMYiYT-4mO8RBrI2rGxZhyQAG04dC_neaaiT4fLgS/dev"
+    urlWords=words
+    urlDict = u';'.join([u'%s-%s' % (key, value) for (key, value) in translatedMap.items()])
+    urlRequest = u"{}?words={}&dict={}".format(urlServer, urlWords, urlDict)
+    response=urllib2.urlopen(urlRequest).read()
+    app.logger.info(response)
+
 @app.route('/lieptas/api/v1.0/dictionary', methods=['GET'])
 def resolve_dictionary():
     #return jsonify({'tasks': tasks})
     words = request.args.get('words', u"nėra žodžių")
     app.logger.info(u'[resolve_recognition] words: {}'.format(words))
     translatedMap = processWords(words)
+    recordRequest(words, translatedMap)
     body = json.dumps(translatedMap)
     app.logger.info(u'[resolve_recognition] dictionary: {}'.format(body))
     #return body.encode('utf8')
